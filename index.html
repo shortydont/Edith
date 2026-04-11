@@ -168,7 +168,11 @@ function callBackend(action, params, onSuccess, onError) {
   var cbName = 'cb' + (++cbCount) + '_' + Date.now();
   var data = btoa(unescape(encodeURIComponent(JSON.stringify(params))));
   var url = BACKEND + '?action=' + action + '&data=' + encodeURIComponent(data) + '&callback=' + cbName;
+  
+  console.log('Calling:', url.substring(0, 100));
+  
   window[cbName] = function(response) {
+    console.log('Got response:', JSON.stringify(response).substring(0, 100));
     try { delete window[cbName]; } catch(e) {}
     if (document.getElementById('jsonp_' + cbName)) {
       document.getElementById('jsonp_' + cbName).remove();
@@ -182,7 +186,9 @@ function callBackend(action, params, onSuccess, onError) {
   var script = document.createElement('script');
   script.id = 'jsonp_' + cbName;
   script.src = url;
+  script.onload = function() { console.log('Script loaded'); };
   script.onerror = function() {
+    console.log('Script error - URL may be wrong or blocked');
     if (onError) onError('Request failed');
     try { delete window[cbName]; script.remove(); } catch(e) {}
   };
