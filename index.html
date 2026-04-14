@@ -104,12 +104,12 @@ body { height: 100%; margin: 0; font-family: 'Inter', -apple-system, sans-serif;
 /* icon buttons (attach + drive) */
 .icon-btn {
   background: none; border: none; cursor: pointer;
-  padding: 6px; border-radius: 8px; color: var(--text3);
+  width: 34px; height: 34px; border-radius: 8px; color: #555552;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: color 0.15s;
+  flex-shrink: 0; transition: color 0.15s, background 0.15s;
 }
-.icon-btn:hover { color: var(--text2); }
-.icon-btn.active { color: var(--text); }
+.icon-btn:hover { color: #1c1c1a; background: rgba(0,0,0,0.06); }
+.icon-btn:active { background: rgba(0,0,0,0.1); }
 
 .confirm-card { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 16px; border-bottom-left-radius: 4px; padding: 14px 16px; max-width: 86%; font-size: 15px; line-height: 1.6; }
 .confirm-label { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #b45309; margin-bottom: 6px; }
