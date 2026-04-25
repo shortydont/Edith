@@ -162,7 +162,7 @@ input[type=file] { display: none; }
 
   /* Welcome — centred search */
   #d-welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 28px; padding: 0 24px; }
-  #d-welcome img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
+  #d-welcome img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; }
   #d-welcome-name { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); }
   #d-welcome-sub { font-size: 14px; color: var(--text3); margin-top: -16px; }
 
@@ -210,7 +210,7 @@ input[type=file] { display: none; }
   #m-header .hclear { margin-left: auto; background: none; border: none; cursor: pointer; font-size: 14px; color: var(--text3); padding: 6px 10px; border-radius: 8px; font-family: inherit; }
 
   #m-welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 14px; padding: 32px 24px; text-align: center; }
-  #m-welcome img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+  #m-welcome img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; }
   #m-welcome h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.025em; color: var(--text); }
   #m-welcome p { font-size: 15px; color: var(--text3); margin-top: -4px; }
 
@@ -234,7 +234,7 @@ input[type=file] { display: none; }
 <div class="drive-modal-overlay" id="drive-modal">
   <div class="drive-modal">
     <button class="drive-modal-close" onclick="closeDrivePicker()">✕ Close</button>
-    <h3><svg width="16" height="14" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg" style="vertical-align:-2px;margin-right:6px"><path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#4285f4"/><path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#34a853"/><path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.5l5.85 11.5z" fill="#ea4335"/><path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/><path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/><path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>Pick a file from Google Drive</h3>
+    <h3><svg width="16" height="14" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg" style="vertical-align:-2px;margin-right:6px"><path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#4285f4"/><path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z" fill="#34a853"/><path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.5l5.85 11.5z" fill="#ea4335"/><path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/><path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/><path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/></svg>Google Drive</h3>
     <div class="drive-search-row">
       <input type="text" id="drive-search-input" placeholder="Search Drive…" onkeydown="driveSearchKey(event)">
       <button onclick="runDriveSearch()">Search</button>
@@ -597,9 +597,40 @@ document.getElementById('file-input').addEventListener('change', function(e) {
 function openDrivePicker(p) {
   drivePickerCaller = p;
   document.getElementById('drive-modal').classList.add('open');
-  document.getElementById('drive-results').innerHTML = '<div class="drive-empty">Type a search term above</div>';
   document.getElementById('drive-search-input').value = '';
+  loadRecentDriveFiles();
   setTimeout(function(){ document.getElementById('drive-search-input').focus(); }, 100);
+}
+
+function loadRecentDriveFiles() {
+  var resultsEl = document.getElementById('drive-results');
+  resultsEl.innerHTML = '<div class="drive-empty">Loading recent files…</div>';
+  var body = JSON.stringify({
+    message: 'List recently modified Google Drive files. Return ONLY a JSON array of objects with fields: id, name, type. No explanation, just the raw JSON array. Maximum 10 results.',
+    history: [], writableTools: []
+  });
+  var fullText = '';
+  fetch(BACKEND + '?action=chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body })
+  .then(function(response) {
+    var reader = response.body.getReader(); var decoder = new TextDecoder(); var buf = '';
+    function read() {
+      reader.read().then(function(result) {
+        if (result.done) { parseDriveResults(fullText, resultsEl, 'Recent files'); return; }
+        buf += decoder.decode(result.value, { stream: true });
+        var lines = buf.split('\n'); buf = lines.pop();
+        for (var i = 0; i < lines.length; i++) {
+          if (!lines[i].startsWith('data: ')) continue;
+          try {
+            var ev = JSON.parse(lines[i].slice(6));
+            if (ev.type === 'token') fullText += ev.text;
+            else if (ev.type === 'done' || ev.type === 'error') { parseDriveResults(fullText, resultsEl, 'Recent files'); return; }
+          } catch(e) {}
+        }
+        read();
+      }).catch(function(){ resultsEl.innerHTML = '<div class="drive-empty">Could not load recent files</div>'; });
+    }
+    read();
+  }).catch(function() { resultsEl.innerHTML = '<div class="drive-empty">Could not load recent files</div>'; });
 }
 function closeDrivePicker() { document.getElementById('drive-modal').classList.remove('open'); }
 function driveSearchKey(e)  { if (e.key === 'Enter') runDriveSearch(); }
@@ -629,7 +660,7 @@ function runDriveSearch() {
           try {
             var ev = JSON.parse(lines[i].slice(6));
             if (ev.type === 'token') fullText += ev.text;
-            else if (ev.type === 'done' || ev.type === 'error') { parseDriveResults(fullText, resultsEl); return; }
+            else if (ev.type === 'done' || ev.type === 'error') { parseDriveResults(fullText, resultsEl, 'Search results'); return; }
           } catch(e) {}
         }
         read();
@@ -639,12 +670,18 @@ function runDriveSearch() {
   }).catch(function() { resultsEl.innerHTML = '<div class="drive-empty">Search failed</div>'; });
 }
 
-function parseDriveResults(text, resultsEl) {
+function parseDriveResults(text, resultsEl, heading) {
   try {
     var raw = text.replace(/```json\n?/g, '').replace(/```/g, '').trim();
     var items = JSON.parse(raw);
     if (!Array.isArray(items) || !items.length) { resultsEl.innerHTML = '<div class="drive-empty">No files found</div>'; return; }
     resultsEl.innerHTML = '';
+    if (heading) {
+      var h = document.createElement('div');
+      h.style.cssText = 'font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;padding:4px 10px 8px;';
+      h.textContent = heading;
+      resultsEl.appendChild(h);
+    }
     items.forEach(function(f) {
       var div = document.createElement('div'); div.className = 'drive-item';
       var shortType = (f.type || '').replace('application/vnd.google-apps.', '').replace('application/', '');
